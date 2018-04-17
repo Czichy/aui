@@ -1203,15 +1203,6 @@ install_desktop_environment(){
 #CONNMAN/NETWORKMANAGER/WICD {{{
 install_nm_wicd(){
   print_title "NETWORK MANAGER"
-  echo " 1) Networkmanager"
-  echo " 2) Wicd"
-  echo " 3) ConnMan"
-  echo ""
-  echo " n) NONE"
-  echo ""
-  read_input $NETWORKMANAGER
-  case "$OPTION" in
-    1)
       print_title "NETWORKMANAGER - https://wiki.archlinux.org/index.php/Networkmanager"
       print_info "NetworkManager is a program for providing detection and configuration for systems to automatically connect to network. NetworkManager's functionality can be useful for both wireless and wired networks."
       if [[ ${KDE} -eq 1 ]]; then
@@ -1230,275 +1221,69 @@ install_nm_wicd(){
       is_package_installed "tlp" && package_install "tlp-rdw"
       # network management daemon
       system_ctl enable NetworkManager.service
-      pause_function
-      ;;
-    2)
-      print_title "WICD - https://wiki.archlinux.org/index.php/Wicd"
-      print_info "Wicd is a network connection manager that can manage wireless and wired interfaces, similar and an alternative to NetworkManager."
-      if [[ ${KDE} -eq 1 ]]; then
-        echo "KDE unsupported. Installing CLI and curses versions only."
-        package_install "wicd"
-      else
-        package_install "wicd wicd-gtk"
-      fi
-      # WICD daemon
-      system_ctl enable wicd
-      pause_function
-      ;;
-    3)
-      print_title "CONNMAN - https://wiki.archlinux.org/index.php/Connman"
-      print_info "ConnMan is an alternative to NetworkManager and Wicd and was created by Intel and the Moblin project for use with embedded devices."
-      package_install "connman"
-      # ConnMan daemon
-      system_ctl enable connman
-      pause_function
-      ;;
-  esac
-}
-#}}}
-#USB 3G MODEM {{{
-install_usb_modem(){
-  print_title "USB 3G MODEM - https://wiki.archlinux.org/index.php/USB_3G_Modem"
-  print_info "A number of mobile telephone networks around the world offer mobile internet connections over UMTS (or EDGE or GSM) using a portable USB modem device."
-  read_input_text "Install usb 3G modem support" $USBMODEM
-  if [[ $OPTION == y ]]; then
-    package_install "usbutils usb_modeswitch"
-    if is_package_installed "networkmanager"; then
-      package_install "modemmanager"
-      [[ ${KDE} -eq 1 ]] && package_install "modemmanager-qt"
-      system_ctl enable ModemManager.service
-    else
-      package_install "wvdial"
-    fi
-    pause_function
-  fi
 }
 #}}}
 #ACCESSORIES {{{
 install_accessories_apps(){
-  while true
-  do
-    print_title "ACCESSORIES APPS"
-    echo " 1) $(menu_item "catfish")"
-    echo " 2) $(menu_item "conky-lua") $AUR"
-    echo " 3) $(menu_item "docky") $AUR"
-    echo " 4) $(menu_item "galculator") $AUR"
-    echo " 5) $(menu_item "pamac-aur" "Pamac") $AUR"
-    echo " 6) $(menu_item "pyrenamer") $AUR"
-    echo " 7) $(menu_item "enpass-bin") $AUR"
-    echo " 8) $(menu_item "shutter hotshots" "$([[ ${KDE} -eq 1 ]] && echo "Hotshots" || echo "Shutter";)")"
-    echo " 9) $(menu_item "synapse")"
-    echo "10) $(menu_item "tilix-bin") $AUR"
-    echo "11) $(menu_item "terminator")"
-    echo "12) $(menu_item "unified-remote-server" "Unified Remote")"
-    echo ""
-    echo " b) BACK"
-    echo ""
-    ACCESSORIES_OPTIONS+=" b"
-    read_input_options "$ACCESSORIES_OPTIONS"
-    for OPT in ${OPTIONS[@]}; do
-      case "$OPT" in
-        1)
-          package_install "catfish"
-          ;;
-        2)
-          aur_package_install "conky-lua"
-          package_install "lm_sensors"
-          sensors-detect --auto
-          ;;
-        3)
-          package_install "docky"
-          aur_package_install "dockmanager"
-          ;;
-        4)
-          package_install "galculator"
-          ;;
-        5)
-          aur_package_install "pamac-aur"
-          ;;
-        6)
-          aur_package_install "pyrenamer"
-          ;;
-        7)
-          aur_package_install "enpass-bin"
-          ;;
-        8)
-          if [[ ${KDE} -eq 1 ]]; then
+         package_install "catfish"
+         aur_package_install "conky-lua"
+         package_install "lm_sensors"
+         sensors-detect --auto
+         package_install "docky"
+         aur_package_install "dockmanager"
+         package_install "galculator"
+         aur_package_install "pamac-aur"
+         aur_package_install "pyrenamer"
+         aur_package_install "enpass-bin"
+         if [[ ${KDE} -eq 1 ]]; then
             aur_package_install "hotshots"
           else
             aur_package_install "shutter"
           fi
-          ;;
-        9)
-          package_install "synapse"
-          ;;
-        10)
-          aur_package_install "tilix-bin"
-          ;;
-        11)
-          package_install "terminator"
-          ;;
-        12)
-          aur_package_install "unified-remote-server"
-          system_ctl enable urserver
-          ;;
-        "b")
-          break
-          ;;
-        *)
-          invalid_option
-          ;;
-      esac
-    done
-    source sharedfuncs_elihw
-  done
+         package_install "synapse"
+         aur_package_install "tilix-bin"
+         package_install "terminator"
+         aur_package_install "unified-remote-server"
+         system_ctl enable urserver
 }
 #}}}
 #DEVELOPEMENT {{{
 install_development_apps(){
-  while true
-  do
-    print_title "DEVELOPMENT APPS"
-    echo " 1) $(menu_item "atom" "Atom")"
-    echo " 2) $(menu_item "emacs")"
-    echo " 3) $(menu_item "gvim")"
-    echo " 4) $(menu_item "meld")"
-    echo " 5) $(menu_item "sublime-text2" "Sublime Text 2") $AUR"
-    echo " 6) $(menu_item "sublime-text-dev" "Sublime Text Dev") $AUR"
-    echo " 7) $(menu_item "android-studio" "Android Studio")"
-    echo " 8) $(menu_item "intellij-idea-community-edition" "IntelliJ IDEA Community Edition")"
-    echo " 9) $(menu_item "intellij-idea-ultimate-edition" "IntelliJ IDEA Ultimate Edition (Commercial)")"
-    echo "10) $(menu_item "monodevelop")"
-    echo "11) $(menu_item "qtcreator")"
-    echo "12) $(menu_item "mysql-workbench" "MySQL Workbench") $AUR"
-    echo "13) $(menu_item "jdk8-openjdk" "OpenJDK 8")"
-    echo "14) $(menu_item "jdk9-openjdk" "OpenJDK 9")"
-    echo "15) $(menu_item "jdk10-openjdk" "OpenJDK 10")"
-    echo "16) $(menu_item "jdk" "Oracle JDK") $AUR"
-    echo "17) $(menu_item "nodejs")"
-    echo "18) $(menu_item "visual-studio-code-bin") $AUR"
-    echo "19) $(menu_item "gitg" "Git GUI-s")"
-    echo "20) $(menu_item "kdiff3" "Visual diff tools")"
-    echo "21) $(menu_item "regexxer" "regexxer - Find and replace GUI tools")"
-    echo ""
-    echo " b) BACK"
-    echo ""
-    DEVELOPMENT_OPTIONS+=" b"
-    read_input_options "$DEVELOPMENT_OPTIONS"
-    for OPT in ${OPTIONS[@]}; do
-      case "$OPT" in
-        1)
-          package_install "atom"
-          ;;
-        2)
-          package_install "emacs"
-          ;;
-        3)
-          package_remove "vim"
-          package_install "gvim ctags"
-          ;;
-        4)
-          package_install "meld"
-          ;;
-        5)
-          aur_package_install "sublime-text2"
-          ;;
-        6)
-          aur_package_install "sublime-text-dev"
-          ;;
-        7)
-          aur_package_install "android-sdk android-sdk-platform-tools android-sdk-build-tools android-platform"
+         package_install "atom"
+         package_install "emacs"
+         package_remove "vim"
+         package_install "gvim ctags"
+         package_install "meld"
+         aur_package_install "sublime-text2"
+         aur_package_install "sublime-text-dev"
+         aur_package_install "android-sdk android-sdk-platform-tools android-sdk-build-tools android-platform"
           add_user_to_group ${username} sdkusers
           chown -R :sdkusers /opt/android-sdk/
           chmod -R g+w /opt/android-sdk/
           add_line "export ANDROID_HOME=/opt/android-sdk" "/home/${username}/.bashrc"
           aur_package_install "android-studio"
-          ;;
-        8)
-          package_install "intellij-idea-community-edition"
-          ;;
-        9)
-          package_install "intellij-idea-ultimate-edition"
-          ;;
-        10)
-          package_install "monodevelop monodevelop-debugger-gdb"
-          ;;
-        11)
-          package_install "qtcreator"
-          ;;
-        12)
-          aur_package_install "mysql-workbench"
-          ;;
-        13)
-          package_remove "jdk"
-          package_install "jdk8-openjdk"
-          ;;
-        14)
-          package_remove "jdk"
-          package_install "jdk9-openjdk"
-          ;;
-        15)
-          package_remove "jdk"
-          package_install "jdk10-openjdk"
-          ;;
-        16)
-          package_remove "jre{7,8,9,10}-openjdk"
-          package_remove "jdk{7,8,9,10}-openjdk"
-          aur_package_install "jdk"
-          ;;
-        17)
-          package_install "nodejs"
-          ;;
-        18)
-          aur_package_install "visual-studio-code-bin"
-          ;;
-        19)
-          aur_package_install "gitg"
-          aur_package_install "qgit"
-          ;;
-        20)
-          aur_package_install "kdiff3"
-          ;;
-        21)
-          aur_package_install "regexxer"
-          ;;
-        "b")
-          break
-          ;;
-        *)
-          invalid_option
-          ;;
-      esac
-    done
-    source sharedfuncs_elihw
-  done
+         package_install "intellij-idea-community-edition"
+         package_install "qtcreator"
+         aur_package_install "mysql-workbench"
+         #package_remove "jdk"
+         #package_install "jdk8-openjdk"
+         #package_remove "jdk"
+         #package_install "jdk9-openjdk"
+         #package_remove "jdk"
+         #package_install "jdk10-openjdk"
+         #package_remove "jre{7,8,9,10}-openjdk"
+         #package_remove "jdk{7,8,9,10}-openjdk"
+         aur_package_install "jdk"
+         package_install "nodejs"
+         aur_package_install "visual-studio-code-bin"
+         aur_package_install "gitg"
+         aur_package_install "qgit"
+         aur_package_install "kdiff3"
+         aur_package_install "regexxer"
 }
 #}}}
 #OFFICE {{{
 install_office_apps(){
-  while true
-  do
-    print_title "OFFICE APPS"
-    echo " 1) $(menu_item "goffice calligra-libs" "$([[ ${KDE} -eq 1 ]] && echo "Caligra" || echo "Abiword + Gnumeric";)")"
-    echo " 2) $(menu_item "calibre")"
-    echo " 3) $(menu_item "gcstar")"
-    echo " 4) $(menu_item "geeknote-git") $AUR"
-    echo " 5) $(menu_item "haroopad") $AUR"
-    echo " 6) $(menu_item "homebank")"
-    echo " 7) $(menu_item "impressive")"
-    echo " 8) $(menu_item "texlive-core" "latex")"
-    echo " 9) $(menu_item "libreoffice-fresh" "LibreOffice")"
-    echo "10) $(menu_item "ocrfeeder")"
-    echo "11) $(menu_item "xmind")"
-    echo "12) $(menu_item "goldendict")"
-    echo ""
-    echo " b) BACK"
-    echo ""
-    OFFICE_OPTIONS+=" b"
-    read_input_options "$OFFICE_OPTIONS"
-    for OPT in ${OPTIONS[@]}; do
-      case "$OPT" in
-        1)
           if [[ ${KDE} -eq 1 ]]; then
             package_install "calligra"
           else
@@ -1506,94 +1291,30 @@ install_office_apps(){
           fi
           package_install "hunspell hunspell-$LOCALE_HS"
           package_install "aspell aspell-$LOCALE_AS"
-          ;;
-        2)
           package_install "calibre"
-          ;;
-        3)
           package_install "gcstar"
-          ;;
-        4)
           aur_package_install "geeknote-git"
-          ;;
-        5)
           aur_package_install "haroopad"
-          ;;
-        6)
           package_install "homebank"
-          ;;
-        7)
           package_install "impressive"
-          ;;
-        8)
           package_install "texlive-most"
-          if [[ $LOCALE == pt_BR ]]; then
-            aur_package_install "abntex"
-          fi
           if [[ ${KDE} -eq 0 ]]; then
             package_install "gummi"
           fi
-          ;;
-        9)
           print_title "LIBREOFFICE - https://wiki.archlinux.org/index.php/LibreOffice"
           package_install "libreoffice-fresh"
           [[ $LOCALE != en_US ]] && package_install "libreoffice-fresh-$LOCALE_LO"
           package_install "hunspell hunspell-$LOCALE_HS"
           package_install "aspell aspell-$LOCALE_AS"
-          ;;
-        10)
           package_install "ocrfeeder tesseract gocr"
           package_install "aspell aspell-$LOCALE_AS"
-          ;;
-        11)
           package_install "xmind"
-          ;;
-        12)
           package_install "goldendict"
-          ;;
-        "b")
-          break
-          ;;
-        *)
-          invalid_option
-          ;;
-      esac
-    done
-    source sharedfuncs_elihw
-  done
 }
 #}}}
 #SYSTEM TOOLS {{{
 install_system_apps(){
-  while true
-  do
     print_title "SYSTEM TOOLS APPS"
-    echo " 1) $(menu_item "clamav" "clamav antivirus")"
-    echo " 2) $(menu_item "cockpit" "cockpit- A web system administration tool") $AUR"
-    echo " 3) $(menu_item "webmin" "webmin- A web system administration tool") $AUR"
-    echo " 4) $(menu_item "docker")"
-    echo " 5) $(menu_item "firewalld")"
-    echo " 6) $(menu_item "gparted")"
-    echo " 7) $(menu_item "grsync" "grsync- Sync files")"
-    echo " 8) $(menu_item "hosts-update" "hosts-update Injects the mvps blocklist to /etc/hosts to prevent thousands of parasites, hijackers and unwanted adware/spyware/privacy websites from working.") $AUR"
-    echo " 9) $(menu_item "htop" "htop- Interactive text-mode process viewer")"
-    echo "10) $(menu_item "plex-media-server" "Plex") $AUR"
-    echo "11) $(menu_item "ufw") $AUR"
-    echo "12) $(menu_item "unified-remote-server" "Unified Remote") $AUR"
-    echo "13) $(menu_item "virtualbox")"
-    echo "14) $(menu_item "wine")"
-    echo "15) $(menu_item "netdata")"
-    echo "16) $(menu_item "nload")"
-    echo "17) $(menu_item "gnome-logs" "Assorted Graphical log viewers")"
-    echo "18) $(menu_item "seahorse" "seahorse Password keyring management GUI")"
-    echo ""
-    echo " b) BACK"
-    echo ""
-    SYSTEMTOOLS_OPTIONS+=" b"
-    read_input_options "$SYSTEMTOOLS_OPTIONS"
-    for OPT in ${OPTIONS[@]}; do
-      case "$OPT" in
-        1)
           package_install "clamav"
           cp /etc/clamav/clamd.conf.sample /etc/clamav/clamd.conf
           cp /etc/clamav/freshclam.conf.sample /etc/clamav/freshclam.conf
@@ -1601,52 +1322,28 @@ install_system_apps(){
           sed -i '/Example/d' /etc/clamav/clamd.conf
           system_ctl enable clamd
           freshclam
-          ;;
-        2)
-          aur_package_install "cockpit storaged linux-user-chroot ostree"
-          ;;
-        3)
-          aur_package_install "webmin"
-          ;;
-        4)
-          package_install "docker"
-          add_user_to_group ${username} docker
-          ;;
-        5)
-          is_package_installed "ufw" && package_remove "ufw"
-          is_package_installed "firewalld" && package_remove "firewalld"
-          package_install "firewalld"
-          system_ctl enable firewalld
-          ;;
-        6)
-          package_install "gparted"
-          ;;
-        7)
-          package_install "grsync"
-          ;;
-        8)
-          aur_package_install "hosts-update"
-          hosts-update
-          ;;
-        9)
-          package_install "htop"
-          ;;
-        10)
-          aur_package_install "plex-media-server"
-          system_ctl enable plexmediaserver.service
-          ;;
-        11)
-          print_title "UFW - https://wiki.archlinux.org/index.php/Ufw"
-          print_info "Ufw stands for Uncomplicated Firewall, and is a program for managing a netfilter firewall. It provides a command line interface and aims to be uncomplicated and easy to use."
-          is_package_installed "firewalld" && package_remove "firewalld"
-          aur_package_install "ufw gufw"
-          system_ctl enable ufw.service
-          ;;
-        12)
-          aur_package_install "unified-remote-server"
-          system_ctl enable urserver.service
-          ;;
-        13)
+    	aur_package_install "cockpit storaged linux-user-chroot ostree"
+        aur_package_install "webmin"
+        package_install "docker"
+        add_user_to_group ${username} docker
+        is_package_installed "ufw" && package_remove "ufw"
+        is_package_installed "firewalld" && package_remove "firewalld"
+        package_install "firewalld"
+        system_ctl enable firewalld
+        package_install "gparted"
+        package_install "grsync"
+        aur_package_install "hosts-update"
+        hosts-update
+        package_install "htop"
+        aur_package_install "plex-media-server"
+        system_ctl enable plexmediaserver.service
+        print_title "UFW - https://wiki.archlinux.org/index.php/Ufw"
+        print_info "Ufw stands for Uncomplicated Firewall, and is a program for managing a netfilter firewall. It provides a command line interface and aims to be uncomplicated and easy to use."
+        is_package_installed "firewalld" && package_remove "firewalld"
+        aur_package_install "ufw gufw"
+        system_ctl enable ufw.service
+        aur_package_install "unified-remote-server"
+        system_ctl enable urserver.service
           #Make sure we are not a VirtualBox Guest
           VIRTUALBOX_GUEST=`dmidecode --type 1 | grep VirtualBox`
           if [[ -z ${VIRTUALBOX_GUEST} ]]; then
@@ -1658,229 +1355,49 @@ install_system_apps(){
             cecho "${BBlue}[${Reset}${Bold}!${BBlue}]${Reset} VirtualBox was not installed as we are a VirtualBox guest."
           fi
           ;;
-        14)
-          package_install "icoutils wine wine_gecko wine-mono winetricks"
-          ;;
-        15)
-          package_install "netdata"
+        package_install "icoutils wine wine_gecko wine-mono winetricks"
+        package_install "netdata"
           system_ctl enable netdata.service
-          ;;
-        16)
-          package_install "nload"
-          ;;
-        17)
-          package_install "gnome-logs"
-          package_install "qjournalctl"
-          package_install "pacmanlogviewer"
-          ;;
-        18)
-          package_install "seahorse"
-          ;;
-        "b")
-          break
-          ;;
-        *)
-          invalid_option
-          ;;
-      esac
-    done
-    source sharedfuncs_elihw
-  done
+        package_install "nload"
+        package_install "gnome-logs"
+        package_install "qjournalctl"
+        package_install "pacmanlogviewer"
+        package_install "seahorse"
 }
 #}}}
 #GRAPHICS {{{
 install_graphics_apps(){
-  while true
-  do
     print_title "GRAPHICS APPS"
-    echo " 1) $(menu_item "blender")"
-    echo " 2) $(menu_item "gimp")"
-    echo " 3) $(menu_item "gthumb")"
-    echo " 4) $(menu_item "inkscape")"
-    echo " 5) $(menu_item "mcomix")"
-    echo " 6) $(menu_item "mypaint")"
-    echo " 7) $(menu_item "pencil" "Pencil Prototyping Tool") $AUR"
-    echo " 8) $(menu_item "scribus")"
-    echo " 9) $(menu_item "shotwell")"
-    echo "10) $(menu_item "simple-scan")"
-    echo ""
-    echo " b) BACK"
-    echo ""
-    GRAPHICS_OPTIONS+=" b"
-    read_input_options "$GRAPHICS_OPTIONS"
-    for OPT in ${OPTIONS[@]}; do
-      case "$OPT" in
-        1)
-          package_install "blender"
-          ;;
-        2)
-          package_install "gimp"
-          ;;
-        3)
-          package_install "gthumb"
-          ;;
-        4)
-          package_install "inkscape python2-numpy python-lxml"
-          ;;
-        5)
-          package_install "mcomix"
-          ;;
-        6)
-          package_install "mypaint"
-          ;;
-        7)
-          aur_package_install "pencil"
-          ;;
-        8)
-          package_install "scribus"
-          ;;
-        9)
-          package_install "shotwell"
-          ;;
-        10)
-          package_install "simple-scan"
-          ;;
-        "b")
-          break
-          ;;
-        *)
-          invalid_option
-          ;;
-      esac
-    done
-    source sharedfuncs_elihw
-  done
+    	#package_install "blender"
+    	package_install "gimp"
+    	#package_install "gthumb"
+        package_install "inkscape python2-numpy python-lxml"
+        #package_install "mcomix"
+        #package_install "mypaint"
+        #aur_package_install "pencil"
+        #package_install "scribus"
+        #package_install "shotwell"
+        package_install "simple-scan"
 }
 #}}}
 #INTERNET {{{
 install_internet_apps(){
-  while true
-  do
     print_title "INTERNET APPS"
-    echo " 1) Browser"
-    echo " 2) Download|Fileshare"
-    echo " 3) Email|RSS"
-    echo " 4) Instant Messaging|IRC"
-    echo " 5) Mapping Tools"
-    echo " 6) VNC|Desktop Share"
-    echo ""
-    echo " b) BACK"
-    echo ""
-    INTERNET_OPTIONS+=" b"
-    read_input_options "$INTERNET_OPTIONS"
-    for OPT in ${OPTIONS[@]}; do
-      case "$OPT" in
-        1)
-          #BROWSER {{{
-          while true
-          do
             print_title "BROWSER"
-            echo " 1) $(menu_item "google-chrome" "Chrome") $AUR"
-            echo " 2) $(menu_item "chromium")"
-            echo " 3) $(menu_item "firefox")"
-            echo " 4) $(menu_item "midori konqueror" "$([[ ${KDE} -eq 1 ]] && echo "Konqueror" || echo "Midori";)")"
-            echo " 5) $(menu_item "opera")"
-            echo " 6) $(menu_item "vivaldi") $AUR"
-            echo " 7) $(menu_item "tor browser") $AUR"
-            echo ""
-            echo " b) BACK"
-            echo ""
-            BROWSERS_OPTIONS+=" b"
-            read_input_options "$BROWSERS_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
-                  aur_package_install "google-chrome"
-                  ;;
-                2)
+            	  aur_package_install "google-chrome"
                   package_install "chromium"
-                  ;;
-                3)
                   package_install "firefox firefox-i18n-$LOCALE_FF"
-                  ;;
-                4)
-                  if [[ ${KDE} -eq 1 ]]; then
-                    package_install "konqueror"
-                  else
-                    package_install "midori"
-                  fi
-                  ;;
-                5)
-                  package_install "opera"
-                  ;;
-                6)
                   aur_package_install "vivaldi"
-                  ;;
-                7)
-                  aur_package_install "tor-browser"
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=1
-          ;;
-        2)
-          #DOWNLOAD|FILESHARE {{{
-          while true
-          do
             print_title "DOWNLOAD|FILESHARE"
-            echo " 1) $(menu_item "aerofs") $AUR"
-            echo " 2) $(menu_item "rslsync" "Resilio Sync") $AUR"
-            echo " 3) $(menu_item "deluge")"
-            echo " 4) $(menu_item "dropbox") $AUR"
-            echo " 5) $(menu_item "flareget") $AUR"
-            echo " 6) $(menu_item "jdownloader") $AUR"
-            echo " 7) $(menu_item "qbittorrent")"
-            echo " 8) $(menu_item "sparkleshare")"
-            echo " 9) $(menu_item "spideroak") $AUR"
-            echo "10) $(menu_item "transmission-qt transmission-gtk" "Transmission")"
-            echo "11) $(menu_item "uget")"
-            echo "12) $(menu_item "youtube-dl")"
-    	    echo "13) $(menu_item "tixati" "tixati p2p bittorrent client") $AUR"
-    	    echo "14) $(menu_item "google-drive-ocamlfuse" "google-drive-ocamlfuse") $AUR"
-            echo ""
-            echo " b) BACK"
-            echo ""
-            DOWNLOAD_OPTIONS+=" b"
-            read_input_options "$DOWNLOAD_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
-                  aur_package_install "aerofs"
-                  ;;
-                2)
+            	  aur_package_install "aerofs"
                   aur_package_install "rslsync"
-                  ;;
-                3)
                   package_install "deluge"
-                  ;;
-                4)
                   aur_package_install "dropbox"
-                  ;;
-                5)
                   aur_package_install "flareget"
-                  ;;
-                6)
                   aur_package_install "jdownloader"
-                  ;;
-                7)
                   package_install "qbittorrent"
-                  ;;
-                8)
                   package_install "sparkleshare"
-                  ;;
-                9)
                   aur_package_install "spideroak"
-                  ;;
-                10)
                   if [[ ${KDE} -eq 1 ]]; then
                     package_install "transmission-qt"
                   else
@@ -1890,236 +1407,19 @@ install_internet_apps(){
                     replace_line '"blocklist-enabled": false' '"blocklist-enabled": true' /home/${username}/.config/transmission/settings.json
                     replace_line "www\.example\.com\/blocklist" "list\.iblocklist\.com\/\?list=bt_level1&fileformat=p2p&archiveformat=gz" /home/${username}/.config/transmission/settings.json
                   fi
-                  ;;
-                11)
                   package_install "uget"
-                  ;;
-                12)
                   package_install "youtube-dl"
-                  ;;
-                13)
                   aur_package_install "tixati"
-                  ;;
-                14)
                   aur_package_install "google-drive-ocamlfuse"
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=2
-          ;;
-        3)
-          #EMAIL {{{
-          while true
-          do
-            print_title "EMAIL|RSS"
-            echo " 1) $(menu_item "liferea")"
-            echo " 2) $(menu_item "thunderbird")"
-            echo ""
-            echo " b) BACK"
-            echo ""
-            EMAIL_OPTIONS+=" b"
-            read_input_options "$EMAIL_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
-                  package_install "liferea"
-                  ;;
-                2)
-                  package_install "thunderbird"
-                  [[ LOCALE_TB != en_US ]] && package_install "thunderbird-i18n-$LOCALE_TB"
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=3
-          ;;
-        4)
-          #IM|IRC {{{
-          while true
-          do
-            print_title "IM - INSTANT MESSAGING"
-            echo " 1) $(menu_item "hexchat konversation" "$([[ ${KDE} -eq 1 ]] && echo "Konversation" || echo "Hexchat";)")"
-            echo " 2) $(menu_item "irssi")"
-            echo " 3) $(menu_item "pidgin")"
-            echo " 4) $(menu_item "skypeforlinux-preview-bin") $AUR"
-            echo " 5) $(menu_item "teamspeak3")"
-            echo " 6) $(menu_item "viber") $AUR"
-            echo " 7) $(menu_item "telegram-desktop")"
-            echo " 8) $(menu_item "qtox")"
-            echo " 9) $(menu_item "discord") $AUR"
-            echo " 10) $(menu_item "slack") $AUR"
-            echo " 11) $(menu_item "vk-messenger") $AUR"
-            echo ""
-            echo " b) BACK"
-            echo ""
-            IM_OPTIONS+=" b"
-            read_input_options "$IM_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
-                  if [[ ${KDE} -eq 1 ]]; then
-                    package_install "konversation"
-                  else
-                    package_install "hexchat"
-                  fi
-                  ;;
-                2)
-                  package_install "irssi"
-                  ;;
-                3)
-                  package_install "pidgin"
-                  ;;
-                4)
-                  aur_package_install "skypeforlinux-preview-bin"
-                  ;;
-                5)
-                  package_install "teamspeak3"
-                  ;;
-                6)
-                  aur_package_install "viber"
-                  ;;
-                7)
-                  package_install "telegram-desktop"
-                  ;;
-                8)
-                  package_install "qtox"
-                  ;;
-                9)
-                  aur_package_install "discord"
-                  ;;
-                10)
-                  aur_package_install "slack"
-                  ;;
-                11)
-                  aur_package_install "vk-messanger"
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=4
-          ;;
-        5)
-          #MAPPING {{{
-          while true
-          do
             print_title "MAPPING TOOLS"
-            echo " 1) $(menu_item "google-earth") $AUR"
-            echo " 2) $(menu_item "worldwind" "NASA World Wind") $AUR"
-            echo ""
-            echo " b) BACK"
-            echo ""
-            MAPPING_OPTIONS+=" b"
-            read_input_options "$MAPPING_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
                   aur_package_install "google-earth"
-                  ;;
-                2)
-                  aur_package_install "worldwind"
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=5
-          ;;
-        6)
-          #DESKTOP SHARE {{{
-          while true
-          do
             print_title "DESKTOP SHARE"
-            echo " 1) $(menu_item "remmina")"
-            echo " 2) $(menu_item "teamviewer") $AUR"
-            echo ""
-            echo " b) BACK"
-            echo ""
-            VNC_OPTIONS+=" b"
-            read_input_options "$VNC_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
-                  package_install "remmina"
-                  ;;
-                2)
                   aur_package_install "teamviewer"
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=6
-          ;;
-        "b")
-          break
-          ;;
-        *)
-          invalid_option
-          ;;
-      esac
-    done
-    source sharedfuncs_elihw
-  done
 }
 #}}}
 #AUDIO {{{
 install_audio_apps(){
-  while true
-  do
     print_title "AUDIO APPS"
-    echo " 1) Players"
-    echo " 2) Editors|Tools"
-    echo " 3) Codecs"
-    echo ""
-    echo " b) BACK"
-    echo ""
-    AUDIO_OPTIONS+=" b"
-    read_input_options "$AUDIO_OPTIONS"
-    for OPT in ${OPTIONS[@]}; do
-      case "$OPT" in
-        1)
-          #PLAYERS {{{
-          while true
-          do
             print_title "AUDIO PLAYERS"
             echo " 1) $(menu_item "amarok")"
             echo " 2) $(menu_item "audacious")"
@@ -2139,349 +1439,44 @@ install_audio_apps(){
             echo ""
             echo " b) BACK"
             echo ""
-            AUDIO_PLAYER_OPTIONS+=" b"
-            read_input_options "$AUDIO_PLAYER_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
                   package_install "amarok"
-                  ;;
-                2)
                   package_install "audacious audacious-plugins"
-                  ;;
-                3)
                   aur_package_install "banshee"
-                  ;;
-                4)
                   package_install "clementine"
-                  ;;
-                5)
                   package_install "deadbeef"
-                  ;;
-                6)
                   aur_package_install "guayadeque"
-                  ;;
-                7)
                   aur_package_install "musique"
-                  ;;
-                8)
                   aur_package_install "nuvolaplayer-git"
-                  ;;
-                9)
                   package_install "pragha"
-                  ;;
-                10)
                   aur_package_install "radiotray"
-                  ;;
-                11)
                   package_install "rhythmbox grilo grilo-plugins libgpod libdmapsharing gnome-python python-mako"
                   #aur_package_install "pywebkitgtk"
                   # pywebkitgtk compile needed and take alot of time around 4-5H on i5-8gigram-ssd hdd
                   # + only need when Cannot activate "context pane" plugin
-                  ;;
-                12)
                   aur_package_install "spotify"
-                  ;;
-                13)
                   aur_package_install "timidity++ fluidr3"
                   echo -e 'soundfont /usr/share/soundfonts/fluidr3/FluidR3GM.SF2' >> /etc/timidity++/timidity.cfg
-                  ;;
-                14)
                   aur_package_install "tomahawk"
-                  ;;
-                15)
                   package_install "quodlibet"
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=1
-          ;;
-        2)
-          #EDITORS {{{
-          while true
-          do
-            print_title "AUDIO EDITORS|TOOLS"
-            echo " 1) $(menu_item "audacity")"
-            echo " 2) $(menu_item "easytag")"
-            echo " 3) $(menu_item "ocenaudio-bin") $AUR"
-            echo " 4) $(menu_item "soundconverter soundkonverter" "$([[ ${KDE} -eq 1 ]] && echo "Soundkonverter" || echo "Soundconverter";)")"
-            echo ""
-            echo " b) BACK"
-            echo ""
-            AUDIO_EDITOR_OPTIONS+=" b"
-            read_input_options "$AUDIO_EDITOR_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
-                  package_install "audacity"
-                  ;;
-                2)
-                  package_install "easytag"
-                  ;;
-                3)
-                  aur_package_install "ocenaudio-bin"
-                  ;;
-                4)
-                  if [[ ${KDE} -eq 1 ]]; then
-                    package_install "soundkonverter"
-                  else
-                    package_install "soundconverter"
-                  fi
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=2
-          ;;
-        3)
-          package_install "gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav"
-          [[ ${KDE} -eq 1 ]] && package_install "phonon-qt5-gstreamer"
-          # Use the 'standard' preset by default. This preset should generally be
-          # transparent to most people on most music and is already quite high in quality.
-          # The resulting bitrate should be in the 170-210kbps range, according to music
-          # complexity.
-          run_as_user "gconftool-2 --type string --set /system/gstreamer/0.10/audio/profiles/mp3/pipeline \audio/x-raw-int,rate=44100,channels=2 ! lame name=enc preset=1001 ! id3v2mux\""
-          ;;
-        "b")
-          break
-          ;;
-        *)
-          invalid_option
-          ;;
-      esac
-    done
-    source sharedfuncs_elihw
-  done
+                  
 }
 #}}}
 #VIDEO {{{
 install_video_apps(){
-  while true
-  do
     print_title "VIDEO APPS"
-    echo " 1) Players"
-    echo " 2) Editors|Tools"
-    echo " 3) Codecs"
-    echo ""
-    echo " b) BACK"
-    echo ""
-    VIDEO_OPTIONS+=" b"
-    read_input_options "$VIDEO_OPTIONS"
-    for OPT in ${OPTIONS[@]}; do
-      case "$OPT" in
-        1)
           #PLAYERS {{{
-          while true
-          do
             print_title "VIDEO PLAYERS"
-            echo " 1) $(menu_item "gnome-mplayer")"
-            echo " 2) $(menu_item "livestreamer")"
-            echo " 3) $(menu_item "minitube")"
-            echo " 4) $(menu_item "miro") $AUR"
-            echo " 5) $(menu_item "mpv")"
-            echo " 6) $(menu_item "parole")"
-            echo " 7) $(menu_item "popcorntime-ce") $AUR"
-            echo " 8) $(menu_item "vlc")"
-            echo " 9) $(menu_item "kodi")"
-            echo "10) $(menu_item "obs-studio")"
-            echo ""
-            echo " b) BACK"
-            echo ""
-            VIDEO_PLAYER_OPTIONS+=" b"
-            read_input_options "$VIDEO_PLAYER_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
                   package_install "gnome-mplayer"
-                  ;;
-                2)
                   package_install "livestreamer"
-                  ;;
-                3)
                   package_install "minitube"
-                  ;;
-                4)
                   aur_package_install "miro"
-                  ;;
-                5)
                   package_install "mpv"
-                  ;;
-                6)
-                  package_install "parole"
-                  ;;
-                7)
-                  aur_package_install "popcorntime-ce"
-                  ;;
-                8)
                   package_install "vlc"
                   [[ ${KDE} -eq 1 ]] && package_install "phonon-qt5-vlc"
-                  ;;
-                9)
                   package_install "kodi"
                   add_user_to_group ${username} kodi
-                  ;;
-                10)
                   package_install "obs-studio-git"
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=1
-          ;;
-        2)
-          #EDITORS {{{
-          while true
-          do
-            print_title "VIDEO EDITORS|TOOLS"
-            echo " 1) $(menu_item "arista") $AUR"
-            echo " 2) $(menu_item "avidemux-gtk avidemux-qt" "Avidemux")"
-            echo " 3) $(menu_item "filebot") $AUR"
-            echo " 4) $(menu_item "handbrake")"
-            echo " 5) $(menu_item "kazam") $AUR"
-            echo " 6) $(menu_item "kdenlive")"
-            echo " 7) $(menu_item "lwks" "Lightworks") $AUR"
-            echo " 8) $(menu_item "openshot")"
-            echo " 9) $(menu_item "pitivi")"
-            echo "10) $(menu_item "transmageddon")"
-            echo ""
-            echo " b) BACK"
-            echo ""
-            VIDEO_EDITOR_OPTIONS+=" b"
-            read_input_options "$VIDEO_EDITOR_OPTIONS"
-            for OPT in ${OPTIONS[@]}; do
-              case "$OPT" in
-                1)
-                  aur_package_install "arista"
-                  ;;
-                2)
-                  if [[ ${KDE} -eq 1 ]]; then
-                    package_install "avidemux-qt"
-                  else
-                    package_install "avidemux-gtk"
-                  fi
-                  ;;
-                3)
-                  aur_package_install "filebot"
-                  ;;
-                4)
-                  package_install "handbrake"
-                  ;;
-                5)
-                  aur_package_install "kazam"
-                  ;;
-                6)
-                  package_install "kdenlive"
-                  ;;
-                7)
-                  aur_package_install "lwks"
-                  ;;
-                8)
-                  package_install "openshot"
-                  ;;
-                9)
-                  package_install "pitivi frei0r-plugins"
-                  ;;
-                10)
-                  package_install "transmageddon"
-                  ;;
-                "b")
-                  break
-                  ;;
-                *)
-                  invalid_option
-                  ;;
-              esac
-            done
-            source sharedfuncs_elihw
-          done
-          #}}}
-          OPT=2
-          ;;
-        3)
-          package_install "libdvdnav libdvdcss cdrdao cdrtools ffmpeg ffmpeg2.8 ffmpegthumbnailer ffmpegthumbs"
-          if [[ ${KDE} -eq 1 ]]; then
-          	package_install "kdegraphics-thumbnailers"
-          fi
-          ;;
-        "b")
-          break
-          ;;
-        *)
-          invalid_option
-          ;;
-      esac
-    done
-    source sharedfuncs_elihw
-  done
-}
-#}}}
-#GAMES {{{
-install_games(){
-  while true
-  do
-    print_title "GAMES - https://wiki.archlinux.org/index.php/Games"
-    echo " 1) Desura $AUR"
-    echo " 2) PlayOnLinux $AUR"
-    echo " 3) Steam"
-    echo " 4) Minecraft"
-    echo ""
-    echo " b) BACK"
-    echo ""
-    GAMES_OPTIONS+=" b"
-    read_input_options "$GAMES_OPTIONS"
-    for OPT in ${OPTIONS[@]}; do
-      case "$OPT" in
-        1)
-          aur_package_install "desura"
-          OPT=1
-          ;;
-        2)
-          aur_package_install "playonlinux"
-          OPT=2
-          ;;
-        3)
-          package_install "steam"
-          OPT=3
-          ;;
-	4)
-	  aur_package_install "minecraft"
-	  OPT=4
-	  ;;
-        "b")
-          break
-          ;;
-        *)
-          invalid_option
-          ;;
-      esac
-    done
-    source sharedfuncs_elihw
-  done
+            
 }
 #}}}
 #WEBSERVER {{{
