@@ -403,6 +403,8 @@ install_zsh(){
 install_samba(){
   print_title "SAMBA - https://wiki.archlinux.org/index.php/Samba"
   print_info "Samba is a re-implementation of the SMB/CIFS networking protocol, it facilitates file and printer sharing among Linux and Windows systems as an alternative to NFS."
+  read_input_text "Install Samba" $SAMBA
+  if [[ $OPTION == y ]]; then
     package_install "samba smbnetfs"
     [[ ! -f /etc/samba/smb.conf ]] && cp /etc/samba/smb.conf.default /etc/samba/smb.conf
     local CONFIG_SAMBA=`cat /etc/samba/smb.conf | grep usershare`
@@ -428,6 +430,8 @@ install_samba(){
     # enable services
     system_ctl enable smbd
     system_ctl enable nmbd
+    pause_function
+  fi
 }
 #}}}
 #READAHEAD {{{
