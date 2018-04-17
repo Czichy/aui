@@ -54,108 +54,26 @@ welcome(){
 language_selector(){
   #AUTOMATICALLY DETECTS THE SYSTEM LOCALE {{{
   #automatically detects the system language based on your locale
-  LOCALE=`locale | grep LANG | sed 's/LANG=//' | cut -c1-5`
+  LOCALE=de_DE#`locale | grep LANG | sed 's/LANG=//' | cut -c1-5`
   #KDE #{{{
-  if [[ $LOCALE == pt_BR || $LOCALE == en_GB || $LOCALE == zh_CN ]]; then
-    LOCALE_KDE=`echo $LOCALE | tr '[:upper:]' '[:lower:]'`
-  else
     LOCALE_KDE=`echo $LOCALE | cut -d\_ -f1`
-  fi
   #}}}
   #FIREFOX #{{{
-  if [[ $LOCALE == pt_BR || $LOCALE == pt_PT || $LOCALE == en_GB || $LOCALE == en_US || $LOCALE == es_AR || $LOCALE == es_CL || $LOCALE == es_ES || $LOCALE == zh_CN ]]; then
-    LOCALE_FF=`echo $LOCALE | tr '[:upper:]' '[:lower:]' | sed 's/_/-/'`
-  else
     LOCALE_FF=`echo $LOCALE | cut -d\_ -f1`
-  fi
   #}}}
   #THUNDERBIRD #{{{
-  if [[ $LOCALE == pt_BR || $LOCALE == pt_PT || $LOCALE == en_US || $LOCALE == en_GB || $LOCALE == es_AR || $LOCALE == es_ES || $LOCALE == zh_CN ]]; then
-    LOCALE_TB=`echo $LOCALE | tr '[:upper:]' '[:lower:]' | sed 's/_/-/'`
-  elif [[ $LOCALE == es_CL ]]; then
-    LOCALE_TB="es-es"
-  else
-    LOCALE_TB=`echo $LOCALE | cut -d\_ -f1`
-  fi
+  LOCALE_TB=`echo $LOCALE | cut -d\_ -f1`
   #}}}
   #HUNSPELL #{{{
-  if [[ $LOCALE == pt_BR ]]; then
-    LOCALE_HS=`echo $LOCALE | tr '[:upper:]' '[:lower:]' | sed 's/_/-/'`
-  elif [[ $LOCALE == pt_PT ]]; then
-    LOCALE_HS="pt_pt"
-  else
-    LOCALE_HS=`echo $LOCALE | cut -d\_ -f1`
-  fi
+  LOCALE_HS=`echo $LOCALE | cut -d\_ -f1`
   #}}}
   #ASPELL #{{{
   LOCALE_AS=`echo $LOCALE | cut -d\_ -f1`
   #}}}
   #LIBREOFFICE #{{{
-  if [[ $LOCALE == pt_BR || $LOCALE == en_GB || $LOCALE == en_US || $LOCALE == zh_CN ]]; then
-    LOCALE_LO=`echo $LOCALE | sed 's/_/-/'`
-  else
     LOCALE_LO=`echo $LOCALE | cut -d\_ -f1`
-  fi
   #}}}
   #}}}
-  print_title "LOCALE - https://wiki.archlinux.org/index.php/Locale"
-  print_info "Locales are used in Linux to define which language the user uses. As the locales define the character sets being used as well, setting up the correct locale is especially important if the language contains non-ASCII characters."
-  read -p "Default system language: \"$LOCALE\" [Y/n]: " OPTION
-  case "$OPTION" in
-    "n")
-      while [[ $OPTION != y ]]; do
-        setlocale
-        read_input_text "Confirm locale ($LOCALE)"
-      done
-      sed -i '/'${LOCALE}'/s/^#//' /etc/locale.gen
-      locale-gen
-      localectl set-locale LANG=${LOCALE_UTF8}
-      #KDE #{{{
-      if [[ $LOCALE == pt_BR || $LOCALE == en_GB || $LOCALE == zh_CN ]]; then
-        LOCALE_KDE=`echo $LOCALE | tr '[:upper:]' '[:lower:]'`
-      else
-        LOCALE_KDE=`echo $LOCALE | cut -d\_ -f1`
-      fi
-      #}}}
-      #FIREFOX #{{{
-      if [[ $LOCALE == pt_BR || $LOCALE == pt_PT || $LOCALE == en_GB || $LOCALE == en_US || $LOCALE == es_AR || $LOCALE == es_CL || $LOCALE == es_ES || $LOCALE == zh_CN ]]; then
-        LOCALE_FF=`echo $LOCALE | tr '[:upper:]' '[:lower:]' | sed 's/_/-/'`
-      else
-        LOCALE_FF=`echo $LOCALE | cut -d\_ -f1`
-      fi
-      #}}}
-      #THUNDERBIRD #{{{
-      if [[ $LOCALE == pt_BR || $LOCALE == pt_PT || $LOCALE == en_US || $LOCALE == en_GB || $LOCALE == es_AR || $LOCALE == es_ES || $LOCALE == zh_CN ]]; then
-        LOCALE_TB=`echo $LOCALE | tr '[:upper:]' '[:lower:]' | sed 's/_/-/'`
-      elif [[ $LOCALE == es_CL ]]; then
-        LOCALE_TB="es-es"
-      else
-        LOCALE_TB=`echo $LOCALE | cut -d\_ -f1`
-      fi
-      #}}}
-      #HUNSPELL #{{{
-      if [[ $LOCALE == pt_BR ]]; then
-        LOCALE_HS=`echo $LOCALE | tr '[:upper:]' '[:lower:]' | sed 's/_/-/'`
-      elif [[ $LOCALE == pt_PT ]]; then
-        LOCALE_HS="pt_pt"
-      else
-        LOCALE_HS=`echo $LOCALE | cut -d\_ -f1`
-      fi
-      #}}}
-      #ASPELL #{{{
-      LOCALE_AS=`echo $LOCALE | cut -d\_ -f1`
-      #}}}
-      #LIBREOFFICE #{{{
-      if [[ $LOCALE == pt_BR || $LOCALE == en_GB || $LOCALE == en_US || $LOCALE == zh_CN ]]; then
-        LOCALE_LO=`echo $LOCALE | sed 's/_/-/'`
-      else
-        LOCALE_LO=`echo $LOCALE | cut -d\_ -f1`
-      fi
-      #}}}
-      ;;
-    *)
-      ;;
-  esac
 }
 #}}}
 #SELECT/CREATE USER {{{
@@ -333,13 +251,7 @@ choose_aurhelper(){
   print_title "AUR HELPER - https://wiki.archlinux.org/index.php/AUR_Helpers"
   print_info "AUR Helpers are written to make using the Arch User Repository more comfortable."
   print_warning "\tNone of these tools are officially supported by Arch devs."
-  aurhelper=("yaourt" "apacman" "pacaur")
-  PS3="$prompt1"
-  echo -e "Choose your default AUR helper to install\n"
-  select OPT in "${aurhelper[@]}"; do
-    case "$REPLY" in
-      1)
-        print_title "YAOURT - https://wiki.archlinux.org/index.php/Yaourt"
+          print_title "YAOURT - https://wiki.archlinux.org/index.php/Yaourt"
         print_info "Yaourt (Yet AnOther User Repository Tool) is a community-contributed wrapper for pacman which adds seamless access to the AUR, allowing and automating package compilation and installation from your choice of the thousands of PKGBUILDs in the AUR, in addition to the many thousands of available Arch Linux binary packages."
         if ! is_package_installed "yaourt" ; then
           package_install "base-devel yajl namcap"
@@ -354,56 +266,6 @@ choose_aurhelper(){
         fi
         AUR_PKG_MANAGER="yaourt --tmp /var/tmp/"
         ;;
-      2)
-        if ! is_package_installed "apacman" ; then
-          package_install "base-devel git jshon"
-          pacman -D --asdeps jshon
-          aui_download_packages "apacman"
-          if ! is_package_installed "apacman" ; then
-            echo "Apacman not installed. EXIT now"
-            pause_function
-            exit 0
-          fi
-        fi
-        AUR_PKG_MANAGER="apacman"
-        ;;
-      3)
-        if ! is_package_installed "pacaur" ; then
-          package_install "base-devel yajl expac"
-          pacman -D --asdeps yajl expac
-          add_key_user "hkp://pgp.mit.edu 1EB2638FF56C0C53"
-	  aui_download_packages "cower pacaur"
-          pacman -D --asdeps cower
-          if ! is_package_installed "pacaur" ; then
-            echo "Pacaur not installed. EXIT now"
-            pause_function
-            exit 0
-          fi
-        fi
-        AUR_PKG_MANAGER="pacaur"
-        ;;
-      *)
-        invalid_option
-        ;;
-    esac
-    [[ -n $OPT ]] && break
-  done
-  pause_function
-}
-#}}}
-#AUTOMODE {{{
-automatic_mode(){
-  print_title "AUTOMODE"
-  print_info "Create a custom install with all options pre-selected.\nUse this option with care."
-  print_danger "\tUse this mode only if you already know all the option.\n\tYou won't be able to select anything later."
-  read_input_text "Enable Automatic Mode"
-  if [[ $OPTION == y ]]; then
-    $EDITOR ${AUI_DIR}/lilo.automode
-    source ${AUI_DIR}/lilo.automode
-    echo -e "The installation will start now."
-    pause_function
-    AUTOMATIC_MODE=1
-  fi
 }
 #}}}
 #CUSTOM REPOSITORIES {{{
@@ -461,7 +323,7 @@ install_basic_setup(){
   print_title "NTFS/FAT/exFAT/F2FS - https://wiki.archlinux.org/index.php/File_Systems"
   print_info "A file system (or filesystem) is a means to organize data expected to be retained after a program terminates by providing procedures to store, retrieve and update data, as well as manage the available space on the device(s) which contain it. A file system organizes data in an efficient manner and is tuned to the specific characteristics of the device."
   package_install "ntfs-3g dosfstools exfat-utils f2fs-tools fuse fuse-exfat autofs mtpfs"
-  pause_function
+  #pause_function
 }
 #}}}
 #SSH {{{
@@ -505,7 +367,7 @@ install_ssh(){
       sed -i '/the setting of/s/^/#/' /etc/ssh/sshd_config
       sed -i '/RhostsRSAAuthentication and HostbasedAuthentication/s/^/#/' /etc/ssh/sshd_config
     #}}}
-    pause_function
+    #pause_function
   fi
 }
 #}}}
@@ -519,7 +381,7 @@ install_nfs(){
     system_ctl enable rpcbind
     system_ctl enable nfs-client.target
     system_ctl enable remote-fs.target
-    pause_function
+    #pause_function
   fi
 }
 #}}}
@@ -527,33 +389,21 @@ install_nfs(){
 install_zsh(){
   print_title "ZSH - https://wiki.archlinux.org/index.php/Zsh"
   print_info "Zsh is a powerful shell that operates as both an interactive shell and as a scripting language interpreter. "
-  read_input_text "Install zsh" $ZSH
-  if [[ $OPTION == y ]]; then
     package_install "zsh"
-    read_input_text "Install oh-my-zsh" $OH_MY_ZSH
-    if [[ $OPTION == y ]]; then
       if [[ -f /home/${username}/.zshrc ]]; then
-        read_input_text "Replace current .zshrc file"
-        if [[ $OPTION == y ]]; then
           run_as_user "mv /home/${username}/.zshrc /home/${username}/.zshrc.bkp"
           run_as_user "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)\""
           run_as_user "$EDITOR /home/${username}/.zshrc"
-        fi
       else
         run_as_user "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)\""
         run_as_user "$EDITOR /home/${username}/.zshrc"
       fi
-    fi
-    pause_function
-  fi
 }
 #}}}
 #SAMBA {{{
 install_samba(){
   print_title "SAMBA - https://wiki.archlinux.org/index.php/Samba"
   print_info "Samba is a re-implementation of the SMB/CIFS networking protocol, it facilitates file and printer sharing among Linux and Windows systems as an alternative to NFS."
-  read_input_text "Install Samba" $SAMBA
-  if [[ $OPTION == y ]]; then
     package_install "samba smbnetfs"
     [[ ! -f /etc/samba/smb.conf ]] && cp /etc/samba/smb.conf.default /etc/samba/smb.conf
     local CONFIG_SAMBA=`cat /etc/samba/smb.conf | grep usershare`
@@ -579,47 +429,33 @@ install_samba(){
     # enable services
     system_ctl enable smbd
     system_ctl enable nmbd
-    pause_function
-  fi
 }
 #}}}
 #READAHEAD {{{
 enable_readahead(){
   print_title "Readahead - https://wiki.archlinux.org/index.php/Improve_Boot_Performance"
   print_info "Systemd comes with its own readahead implementation, this should in principle improve boot time. However, depending on your kernel version and the type of your hard drive, your mileage may vary (i.e. it might be slower)."
-  read_input_text "Enable Readahead" $READAHEAD
-  if [[ $OPTION == y ]]; then
     system_ctl enable systemd-readahead-collect
     system_ctl enable systemd-readahead-replay
-    pause_function
-  fi
 }
 #}}}
 #ZRAM {{{
 install_zram (){
   print_title "ZRAM - https://wiki.archlinux.org/index.php/Maximizing_Performance"
   print_info "Zram creates a device in RAM and compresses it. If you use for swap means that part of the RAM can hold much more information but uses more CPU. Still, it is much quicker than swapping to a hard drive. If a system often falls back to swap, this could improve responsiveness. Zram is in mainline staging (therefore its not stable yet, use with caution)."
-  read_input_text "Install Zram" $ZRAM
-  if [[ $OPTION == y ]]; then
     aur_package_install "zramswap"
     system_ctl enable zramswap
-    pause_function
-  fi
 }
 #}}}
 #TLP {{{
 install_tlp(){
   print_title "TLP - https://wiki.archlinux.org/index.php/Tlp"
   print_info "TLP is an advanced power management tool for Linux. It is a pure command line tool with automated background tasks and does not contain a GUI."
-  read_input_text "Install TLP" $TLP
-  if [[ $OPTION == y ]]; then
     package_install "tlp"
     system_ctl enable tlp
     system_ctl enable tlp-sleep
     system_ctl disable systemd-rfkill
     tlp start
-    pause_function
-  fi
 }
 #}}}
 #XORG {{{
@@ -630,18 +466,13 @@ install_xorg(){
   package_install "xorg-server xorg-apps xorg-server-xwayland xorg-xinit xorg-xkill xorg-xinput xf86-input-libinput"
   package_install "mesa"
   modprobe uinput
-  pause_function
 }
 #}}}
 #FONT CONFIGURATION {{{
 font_config(){
   print_title "FONTS CONFIGURATION - https://wiki.archlinux.org/index.php/Font_Configuration"
   print_info "Fontconfig is a library designed to provide a list of available fonts to applications, and also for configuration for how fonts get rendered."
-  read_input_text "Install Fontconfig" $FONTCONFIG
-  if [[ $OPTION == y ]]; then
     pacman -S --asdeps --needed cairo fontconfig freetype2
-    pause_function
-  fi
 }
 #}}}
 #VIDEO CARDS {{{
@@ -751,27 +582,22 @@ install_video_cards(){
   if is_package_installed "libvdpau-va-gl"; then
     add_line "export VDPAU_DRIVER=va_gl" "/etc/profile"
   fi
-  pause_function
+  #pause_function
 }
 #}}}
 #CUPS {{{
 install_cups(){
   print_title "CUPS - https://wiki.archlinux.org/index.php/Cups"
   print_info "CUPS is the standards-based, open source printing system developed by Apple Inc. for Mac OS X and other UNIX-like operating systems."
-  read_input_text "Install CUPS (aka Common Unix Printing System)" $CUPS
-  if [[ $OPTION == y ]]; then
     package_install "cups cups-filters ghostscript gsfonts"
     package_install "gutenprint foomatic-db foomatic-db-engine foomatic-db-nonfree foomatic-db-ppds foomatic-db-nonfree-ppds hplip splix cups-pdf foomatic-db-gutenprint-ppds"
     system_ctl enable org.cups.cupsd.service
-    pause_function
-  fi
 }
 #}}}
 #ADDITIONAL FIRMWARE {{{
 install_additional_firmwares(){
   print_title "INSTALL ADDITIONAL FIRMWARES"
   read_input_text "Install additional firmwares [Audio,Bluetooth,Scanner,Wireless]" $FIRMWARE
-  if [[ $OPTION == y ]]; then
     while true
     do
       print_title "INSTALL ADDITIONAL FIRMWARES"
@@ -842,7 +668,6 @@ install_additional_firmwares(){
       source sharedfuncs_elihw
       create_ramdisk_environment
     done
-  fi
 }
 #}}}
 #DESKTOP ENVIRONMENT {{{
