@@ -329,8 +329,6 @@ install_basic_setup(){
 install_ssh(){
   print_title "SSH - https://wiki.archlinux.org/index.php/Ssh"
   print_info "Secure Shell (SSH) is a network protocol that allows data to be exchanged over a secure channel between two computers."
-  read_input_text "Install ssh" $SSH
-  if [[ $OPTION == y ]]; then
     package_install "openssh"
     system_ctl enable sshd
     [[ ! -f /etc/ssh/sshd_config.aui ]] && cp -v /etc/ssh/sshd_config /etc/ssh/sshd_config.aui;
@@ -366,22 +364,16 @@ install_ssh(){
       sed -i '/the setting of/s/^/#/' /etc/ssh/sshd_config
       sed -i '/RhostsRSAAuthentication and HostbasedAuthentication/s/^/#/' /etc/ssh/sshd_config
     #}}}
-    #pause_function
-  fi
 }
 #}}}
 #NFS {{{
 install_nfs(){
   print_title "NFS - https://wiki.archlinux.org/index.php/Nfs"
   print_info "NFS allowing a user on a client computer to access files over a network in a manner similar to how local storage is accessed."
-  read_input_text "Install nfs" $NFS
-  if [[ $OPTION == y ]]; then
     package_install "nfs-utils"
     system_ctl enable rpcbind
     system_ctl enable nfs-client.target
     system_ctl enable remote-fs.target
-    #pause_function
-  fi
 }
 #}}}
 #ZSH {{{
