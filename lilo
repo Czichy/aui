@@ -265,7 +265,6 @@ choose_aurhelper(){
           fi
         fi
         AUR_PKG_MANAGER="yaourt --tmp /var/tmp/"
-        ;;
 }
 #}}}
 #CUSTOM REPOSITORIES {{{
