@@ -795,7 +795,7 @@ install_desktop_environment(){
   install_misc_apps() { #{{{
       print_title "$1 ESSENTIAL APPS"
             install_display_manager
-            package_install "dmenu2"
+            package_install "dmenu"
             package_install "feh"
             package_install "viewnior"
             package_install "gmrun"
