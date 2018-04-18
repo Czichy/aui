@@ -699,30 +699,10 @@ install_desktop_environment(){
     done
   } #}}}
   install_gtk_theme() { #{{{
-    while true
-    do
       print_title "GTK2/GTK3 THEMES"
-      echo " 1) $(menu_item "arc-gtk-theme" "Arc Themes")"
-      echo ""
-      echo " b) BACK"
-      echo ""
-      GTK_THEMES+=" b"
-      read_input_options "$GTK_THEMES"
-      for OPT in ${OPTIONS[@]}; do
-        case "$OPT" in
-          1)
             package_install "arc-gtk-theme"
-            ;;
-          "b")
-            break
-            ;;
-          *)
-            invalid_option
-            ;;
-        esac
-      done
-      source sharedfuncs_elihw
-    done
+            git clone https://github.com/Czichy/gtk-theme-collections ~/.themes
+      #source sharedfuncs_elihw
   } #}}}
   install_display_manager() { #{{{
     while true
@@ -813,79 +793,22 @@ install_desktop_environment(){
     done
   } #}}}
   install_misc_apps() { #{{{
-    while true
-    do
       print_title "$1 ESSENTIAL APPS"
-      echo " 1) $(menu_item "entrance-git gdm lightdm sddm" "Display Manager") $AUR"
-      echo " 2) $(menu_item "dmenu")"
-      echo " 3) $(menu_item "viewnior")"
-      echo " 4) $(menu_item "gmrun")"
-      echo " 5) $(menu_item "rxvt-unicode")"
-      echo " 6) $(menu_item "squeeze-git") $AUR"
-      echo " 7) $(menu_item "thunar")"
-      echo " 8) $(menu_item "tint2")"
-      echo " 9) $(menu_item "volwheel")"
-      echo "10) $(menu_item "xfburn")"
-      echo "11) $(menu_item "xcompmgr")"
-      echo "12) $(menu_item "zathura")"
-      echo "13) $(menu_item "speedtest-cli")"
-      echo ""
-      echo " d) DONE"
-      echo ""
-      MISCAPPS+=" d"
-      read_input_options "$MISCAPPS"
-      for OPT in ${OPTIONS[@]}; do
-        case "$OPT" in
-          1)
             install_display_manager
-            OPT=1
-            ;;
-          2)
-            package_install "dmenu"
-            ;;
-          3)
+            package_install "dmenu2"
+            package_install "feh"
             package_install "viewnior"
-            ;;
-          4)
             package_install "gmrun"
-            ;;
-          5)
             package_install "rxvt-unicode"
-            ;;
-          6)
             aur_package_install "squeeze-git"
-            ;;
-          7)
             package_install "thunar tumbler"
-            ;;
-          8)
             package_install "tint2"
-            ;;
-          9)
             package_install "volwheel"
-            ;;
-          10)
             package_install "xfburn"
-            ;;
-          11)
             package_install "xcompmgr transset-df"
-            ;;
-          12)
             package_install "zathura"
-            ;;
-          13)
             package_install "speedtest-cli"
-            ;;
-          "d")
-            break
-            ;;
-          *)
-            invalid_option
-            ;;
-        esac
-      done
-      source sharedfuncs_elihw
-    done
+#      source sharedfuncs_elihw
   } #}}}
 
   print_title "DESKTOP ENVIRONMENT|WINDOW MANAGER"
@@ -1144,6 +1067,7 @@ install_desktop_environment(){
       package_install "openbox obconf obmenu menumaker"
       package_install "lxappearance"
       package_install "leafpad epdfview nitrogen"
+      aur_package_install "openbox-patched"
       mkdir -p /home/${username}/.config/openbox/
       cp /etc/xdg/openbox/{menu.xml,rc.xml,autostart} /home/${username}/.config/openbox/
       chown -R ${username}:users /home/${username}/.config
