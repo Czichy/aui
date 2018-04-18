@@ -1173,6 +1173,7 @@ install_accessories_apps(){
 #}}}
 #DEVELOPEMENT {{{
 install_development_apps(){
+         aur_package_install "qtwebkit-bin"
          package_install "atom"
          package_install "emacs"
          package_remove "vim"
@@ -1187,7 +1188,7 @@ install_development_apps(){
           add_line "export ANDROID_HOME=/opt/android-sdk" "/home/${username}/.bashrc"
           aur_package_install "android-studio"
          package_install "intellij-idea-community-edition"
-         package_install "qtcreator"
+         #package_install "qtcreator"
          aur_package_install "mysql-workbench"
          #package_remove "jdk"
          #package_install "jdk8-openjdk"
@@ -1395,7 +1396,7 @@ install_video_apps(){
                   aur_package_install "miro"
                   package_install "mpv"
                   package_install "vlc"
-                  [[ ${KDE} -eq 1 ]] && package_install "phonon-qt5-vlc"
+                  #[[ ${KDE} -eq 1 ]] && package_install "phonon-qt5-vlc"
                   package_install "kodi"
                   add_user_to_group ${username} kodi
                   package_install "obs-studio-git"
