@@ -1278,7 +1278,6 @@ install_system_apps(){
           else
             cecho "${BBlue}[${Reset}${Bold}!${BBlue}]${Reset} VirtualBox was not installed as we are a VirtualBox guest."
           fi
-          ;;
         package_install "icoutils wine wine_gecko wine-mono winetricks"
         package_install "netdata"
           system_ctl enable netdata.service
