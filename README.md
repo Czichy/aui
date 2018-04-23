@@ -1,76 +1,60 @@
-### Project only accepting patches
-This project is not actively developed but *will* accept PRs
+# ArcoLinuxD Openbox desktop
 
-# Archlinux U Install
+# Start by installing the latest ArcoLinuxD installation
 
-Install and configure archlinux has never been easier!
+Download at https://arcolinux.info and burn to usb
 
-You can try it first with a `virtualbox`
+# Follow installation tutorials on
 
-## Prerequisites
+Tutorials on https://arcolinuxd.com
 
-- A working internet connection
-- Logged in as 'root'
+# Vision
 
-## How to get it
-### With git
-- Increase cowspace partition: `mount -o remount,size=2G /run/archiso/cowspace`
-- Get list of packages and install git: `pacman -Sy git`
-- get the script: `git clone git://github.com/helmuthdu/aui`
+This github will not only install the desktop.
+But we will install all needed software.
 
-### Without git
-- get the script: ` wget https://github.com/helmuthdu/aui/tarball/master -O - | tar xz`
-    - an alternate URL (for less typing (github shorten)) is ` wget https://git.io/vS1GH -O - | tar xz`
-    - an alternate URL (for less typing) is ` wget http://bit.ly/NoUPC6 -O - | tar xz`
-    - super short `wget ow.ly/wnFgh -O aui.zip`
+We will also make it very easy to have a desktop you can be proud of.
+All icons, themes, cursors, wallpapers, conky's  will be there.
+Just select them.
 
-## How to use
-- FIFO [system base]: `cd <dir> && ./fifo`
-- LILO [the rest...]: `cd <dir> && ./lilo`
+Change the scripts to give it a personal touch.
+Hashtag out the applications you do not want.
 
-## FIFO SCRIPT
-- Configure keymap
-- Select editor
-- Automatic configure mirrorlist
-- Create partition
-- Format device
-- Install system base
-- Configure fstab
-- Configure hostname
-- Configure timezone
-- Configure hardware clock
-- Configure locale
-- Configure mkinitcpio
-- Install/Configure bootloader
-- Configure mirrorlist
-- Configure root password
+Copy/paste lines and add applications you do want.
 
-## LILO SCRIPT
-- Backup all modified files
-- Install additional repositories
-- Create and configure new user
-- Install and configure sudo
-- Automatic enable services in systemd
-- Install an AUR Helper [yaourt, packer, pacaur]
-- Install base system
-- Install systemd
-- Install Preload
-- Install Zram
-- Install Xorg
-- Install GPU Drivers
-- Install CUPS
-- Install Additional wireless/bluetooth firmwares
-- Ensuring access to GIT through a firewall
-- Install DE or WM [Cinnamon, Enlightenment, FluxBox, GNOME, i3, KDE, LXDE, OpenBox, XFCE]
-- Install Developement tools [Vim, Emacs, Eclipse...]
-- Install Office apps [LibreOffice, GNOME-Office, Latex...]
-- Install System tools [Wine, Virtualbox, Grsync, Htop]
-- Install Graphics apps [Inkscape, Gimp, Blender, MComix]
-- Install Internet apps [Firefox, Google-Chrome, Jdownloader...]
-- Install Multimedia apps [Rhythmbox, Clementine, Codecs...]
-- Install Games [HoN, World of Padman, Wesnoth...]
-- Install Fonts [Liberation, MS-Fonts, Google-webfonts...]
-- Install and configure Web Servers
-- Many More...
+And then run the scripts.
 
-If you like my work, please consider a small Paypal donation at helmuthdu@gmail.com :)
+If we would make an iso, you would not have this choice, this freedom.
+Now you do.
+
+Learn, have fun and enjoy.
+
+
+# Websites
+
+Information : https://arcolinux.info
+
+Tutorials about ArcoLinux iso (Xfce, Openbox and i3) : https://arcolinux.com
+
+Tutorials about ArcoLinuxD iso (any desktop) : https://arcolinuxd.com
+
+Forum : https://arcolinuxforum.com
+
+
+# Social Media
+
+Facebook : https://www.facebook.com/arcolinuxd/
+
+Facebook : https://www.facebook.com/groups/arcolinux/
+
+Google + : https://plus.google.com/u/0/communities/104398992023863502986
+
+Flickr   : https://www.flickr.com/photos/arcolinux/
+
+Twitter  : https://twitter.com/arcolinux
+
+Instagram: https://www.instagram.com/arcolinux/
+
+Linked in: https://www.linkedin.com/in/arcolinux
+
+Youtube  : https://www.youtube.com/erikdubois
